@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b75a4e17a9b46349880c711537a2e6f, type: 3}
+  m_Name: StandardEnemy
+  m_EditorClassIdentifier: 
+  name: Standard Enemy
+  description: Standard Enemy
+  HP_stat: 100
+  ATK_stat: 100
+  DEF_stat: 100
+  Movement_SPD_stat: 5
+  mat: {fileID: 2100000, guid: 66481bdfb1f765f4e9c2981444ff5b3f, type: 2}

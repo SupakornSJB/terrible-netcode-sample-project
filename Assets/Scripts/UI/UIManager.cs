@@ -5,11 +5,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class UIManager : NetworkBehaviour
 {
-    [SerializeField] private Button startHostButton; 
-    [SerializeField] private Button startClientButton; 
+    [SerializeField] private Button startHostButton;
+    [SerializeField] private Button startClientButton;
     [SerializeField] private Button startServerButton;
+    [SerializeField] private Button startSpawnButton;
     [SerializeField] private TextMeshProUGUI inGameText;
 
     private void Awake()
@@ -19,7 +20,8 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        inGameText.text = $"Players in game: {PlayerManager.Instance.PlayersInGame}";
+        inGameText.text = $"Players in game: {PlayerManager.Instance.PlayersInGame} <br>" + 
+          $"Spawning: {EnemySpawnManager.Instance.IsSpawning}";
     }
 
     private void Start()
@@ -34,7 +36,7 @@ public class UIManager : MonoBehaviour
             {
                 Debug.Log("Host can not be started");
             }
-        }); 
+        });
 
         startClientButton.onClick.AddListener(() =>
         {
@@ -46,8 +48,7 @@ public class UIManager : MonoBehaviour
             {
                 Debug.Log("Client can not be started");
             }
-
-        }); 
+        });
 
         startServerButton.onClick.AddListener(() =>
         {
@@ -59,7 +60,14 @@ public class UIManager : MonoBehaviour
             {
                 Debug.Log("Server can not be started");
             }
+        });
 
-        }); 
+        startSpawnButton.onClick.AddListener(() =>
+        {
+            if (IsServer)
+            {
+                EnemySpawnManager.Instance.SetIsSpawn((prev) => !prev);
+            }
+        });
     }
 }
