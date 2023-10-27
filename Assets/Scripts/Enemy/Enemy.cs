@@ -7,10 +7,9 @@ using Unity.Netcode;
 public class Enemy : NetworkBehaviour
 {
     [SerializeField] private NetworkVariable<bool> isMoving = new NetworkVariable<bool>();
-    [SerializeField] private NetworkVariable<bool> isReady = new NetworkVariable<bool>(false);
+    [SerializeField] public NetworkVariable<bool> isReady = new NetworkVariable<bool>(false);
     private NetworkVariable<int> enemyConfigId = new NetworkVariable<int>(-1); // crucial must be set to non zero
-    private EnemyScriptableObject enemyConfig;
-    private NetworkVariable<int> HP_stat = new NetworkVariable<int>();
+    public EnemyScriptableObject enemyConfig;
     GameObject followingPlayer;
 
     void Update()
@@ -66,21 +65,11 @@ public class Enemy : NetworkBehaviour
         if (IsServer)
         {
             isMoving.Value = followingPlayer == null ? false : true;
-            HP_stat.Value = enemyConfig.HP_stat;
         }
 
         if (enemyConfig != null && followingPlayer != null)
         {
             isReady.Value = true;
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("Hello Collider");
-        if (other.CompareTag("Attack"))
-        {
-
         }
     }
 }
