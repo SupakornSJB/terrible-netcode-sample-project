@@ -6,10 +6,13 @@ using Unity.Netcode.Components;
 
 public class PlayerMotor : NetworkBehaviour
 {
-    private CharacterController controller;
-    private Rigidbody playerRigidBody;
+    private const float SPRINT_SPEED = 6.0f;
+    private const float WALKING_SPEED = 2.0f;
+
+    /* private CharacterController controller; */
+    private new Rigidbody rigidbody;
     private Vector3 playerVelocity;
-    private float speed = 20f;
+    private float speed;
     private float gravity = -9.8f;
     private bool isGrounded;
     private float jumpHeight = 4.0f;
@@ -18,14 +21,16 @@ public class PlayerMotor : NetworkBehaviour
 
     void Start()
     {
-        controller = GetComponent<CharacterController>();
+        speed = WALKING_SPEED;
+        rigidbody = GetComponent<Rigidbody>();
+        /* controller = GetComponent<CharacterController>(); */
         transform.position = new Vector3(Random.Range(defaultPositionRange.x, defaultPositionRange.y), 2,
             Random.Range(defaultPositionRange.x, defaultPositionRange.y));
     }
 
     void Update()
     {
-        isGrounded = controller.isGrounded;
+        /* isGrounded = controller.isGrounded; */
     }
 
     public void ProcessMove(Vector2 input)
@@ -33,21 +38,36 @@ public class PlayerMotor : NetworkBehaviour
         Vector3 moveDirection = Vector3.zero;
         moveDirection.x = input.x;
         moveDirection.z = input.y;
-        controller.Move(transform.TransformDirection(moveDirection) * speed * Time.deltaTime);
+        rigidbody.AddForce(transform.TransformDirection(moveDirection) * speed * 10);
 
-        playerVelocity.y += gravity * Time.deltaTime;
-        if (isGrounded && playerVelocity.y < 0)
+        if (rigidbody.velocity.magnitude > speed)
         {
-            playerVelocity.y = -2.0f;
+            rigidbody.velocity = rigidbody.velocity.normalized * speed;
         }
-        controller.Move(playerVelocity * Time.deltaTime);
+
+        /* controller.Move(transform.TransformDirection(moveDirection) * speed * Time.deltaTime); */
+
+
+        /* playerVelocity.y += gravity * Time.deltaTime; */
+        /* if (isGrounded && playerVelocity.y < 0) */
+        /* { */
+        /*     playerVelocity.y = -2.0f; */
+        /* } */
+        /* controller.Move(playerVelocity * Time.deltaTime); */
     }
 
     public void Jump()
     {
-        if (isGrounded)
-        {
-            playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravity);
-        }
+        float startVel = Mathf.Sqrt(-2 * gravity * jumpHeight);
+        rigidbody.AddForce(Vector3.up * startVel, ForceMode.VelocityChange);
+        /* if (isGrounded) */
+        /* { */
+        /*     playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravity); */
+        /* } */
+    }
+
+    public void SetIsSprinting(bool sprinting)
+    {
+        speed = sprinting ? SPRINT_SPEED : WALKING_SPEED;
     }
 }

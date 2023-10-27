@@ -10,26 +10,23 @@ public class PlayerHealth : NetworkBehaviour
 {
     [Tooltip("Player's health")]
     private NetworkVariable<int> health = new NetworkVariable<int>();
-    private CharacterController controller;
+    /* private CharacterController controller; */
     private TextMeshProUGUI healthText;
 
     private void Start()
     {
-        controller = GetComponent<CharacterController>();
-        controller.detectCollisions = true;
+        /* controller = GetComponent<CharacterController>(); */
+        /* controller.detectCollisions = true; */
         healthText = GameObject.Find("Canvas/HealthDisplayText").GetComponent<TextMeshProUGUI>();
         healthText.text = "health " + health.Value;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.CompareTag("Bullet"))
+        if (collision.gameObject.CompareTag("Bullet") && IsOwner && IsClient)
         {
-            if (!other.gameObject.GetComponent<NetworkBehaviour>().IsOwner && IsClient && IsOwner)
-            {
-                PlayerHitServerRpc();
-                StartCoroutine(ChangeHealthTextColor());
-            }
+            PlayerHitServerRpc();
+            StartCoroutine(ChangeHealthTextColor());
         }
     }
 

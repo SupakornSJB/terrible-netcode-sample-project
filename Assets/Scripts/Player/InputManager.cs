@@ -5,7 +5,7 @@ using UnityEngine;
 public class InputManager : MonoBehaviour 
 {
     private PlayerInput playerInput;
-    private PlayerInput.OnFootActions onFoot;
+    public PlayerInput.OnFootActions onFoot;
     private PlayerMotor motor;
     private PlayerLook look;
     private PlayerShoot shoot;
@@ -19,6 +19,8 @@ public class InputManager : MonoBehaviour
         shoot = GetComponent<PlayerShoot>();
         onFoot.Fire.performed += (ctx) => shoot.ShootBullet();
         onFoot.Jump.performed += (ctx) => motor.Jump();
+        onFoot.Sprint.performed += (ctx) => motor.SetIsSprinting(true);
+        onFoot.Sprint.canceled += (ctx) => motor.SetIsSprinting(false);
     }
 
     void FixedUpdate()
