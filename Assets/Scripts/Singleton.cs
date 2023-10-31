@@ -12,25 +12,23 @@ public class Singleton<T> : NetworkBehaviour
     {
         get
         {
-            if (_instance == null)
+            if (_instance != null) return _instance;
+            var objs = FindObjectsOfType(typeof(T)) as T[];
+            if (objs is { Length: > 0 })
             {
-                var objs = FindObjectsOfType(typeof(T)) as T[];
-                if (objs.Length > 0)
+                _instance = objs[0];
+            }
+            else if (objs.Length > 1)
+            {
+                Debug.LogError("There is more than one " + typeof(T).Name + " in the scene");
+            }
+            else if (_instance == null)
+            {
+                GameObject obj = new GameObject
                 {
-                    _instance = objs[0];
-                }
-                else if (objs.Length > 1)
-                {
-                    Debug.LogError("There is more than one " + typeof(T).Name + " in the scene");
-                }
-                else if (_instance == null)
-                {
-                    GameObject obj = new GameObject
-                    {
-                        name = $"_{typeof(T).Name}"
-                    };
-                    _instance = obj.AddComponent<T>();
-                }
+                    name = $"_{typeof(T).Name}"
+                };
+                _instance = obj.AddComponent<T>();
             }
             return _instance;
         }

@@ -1,43 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Unity.Netcode;
+using UnityEngine;
+using UnityEngine.Serialization;
 
-[RequireComponent(typeof(Enemy))]
-public class EnemyHealth : NetworkBehaviour
+namespace Enemy
 {
-    private Enemy enemy;
-    public NetworkVariable<int> HP_stat = new NetworkVariable<int>(10);
-
-    public override void OnNetworkSpawn()
+    [RequireComponent(typeof(global::Enemy.Enemy))]
+    public class EnemyHealth : NetworkBehaviour
     {
-        base.OnNetworkSpawn();
-        enemy = GetComponent<Enemy>();
-        if (IsServer)
+        private global::Enemy.Enemy enemy;
+        [FormerlySerializedAs("HP_stat")] public NetworkVariable<int> hpStat = new NetworkVariable<int>(10);
+
+        public override void OnNetworkSpawn()
         {
-            enemy.isReady.OnValueChanged += (_, current) =>
+            base.OnNetworkSpawn();
+            enemy = GetComponent<global::Enemy.Enemy>();
+            if (IsServer)
             {
-                if (current)
+                enemy.isReady.OnValueChanged += (_, current) =>
                 {
-                    HP_stat.Value = enemy.enemyConfig.HP_stat;
+                    if (current)
+                    {
+                        hpStat.Value = enemy.enemyConfig.hpStat;
+                    }
+                };
+            }
+
+            hpStat.OnValueChanged += (_, current) => 
+            {
+                if (IsServer && current <= 0)
+                {
+                    Destroy(gameObject);
                 }
             };
         }
 
-        HP_stat.OnValueChanged += (_, current) => 
+        private void OnCollisionEnter(Collision collision)
         {
-            if (IsServer && current <= 0)
+            if (IsServer && collision.gameObject.CompareTag("Bullet"))
             {
-                Destroy(gameObject);
+                hpStat.Value -= 60;
             }
-        };
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (IsServer && collision.gameObject.CompareTag("Bullet"))
-        {
-            HP_stat.Value -= 60;
         }
     }
 }

@@ -1,15 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "New Enemy", menuName = "Scriptable Object/Enemy Type")]
-public class EnemyScriptableObject : ScriptableObject 
+namespace Enemy
 {
-    public new string name;
-    public string description;
-    public int HP_stat;
-    public int ATK_stat;
-    public int DEF_stat;
-    public int Movement_SPD_stat;
-    public Material mat;
+    [CreateAssetMenu(fileName = "New Enemy", menuName = "Scriptable Object/Enemy Type")]
+    public class EnemyScriptableObject : ScriptableObject 
+    {
+        public new string name;
+        public string description;
+        [FormerlySerializedAs("HP_stat")] public int hpStat;
+        [FormerlySerializedAs("ATK_stat")] public int atkStat;
+        [FormerlySerializedAs("DEF_stat")] public int defStat;
+        [FormerlySerializedAs("Movement_SPD_stat")] public int movementSpdStat;
+        public Material mat;
+    }
 }

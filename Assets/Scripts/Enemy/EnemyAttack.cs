@@ -1,42 +1,43 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAttack : MonoBehaviour
+namespace Enemy
 {
-    private Enemy enemy;
-    private GameObject player;
-    private bool isReady = false;
-
-    void Start()
+    public class EnemyAttack : MonoBehaviour
     {
-        enemy = GetComponent<Enemy>();
+        private global::Enemy.Enemy enemy;
+        private GameObject player;
+        private bool isReady = false;
 
-        if (!enemy.isReady.Value)
+        private void Start()
         {
-            enemy.isReady.OnValueChanged += (_, current) =>
-            {
-                if (!current)
-                {
-                    return;
-                }
+            enemy = GetComponent<global::Enemy.Enemy>();
 
+            if (!enemy.isReady.Value)
+            {
+                enemy.isReady.OnValueChanged += (_, current) =>
+                {
+                    if (!current)
+                    {
+                        return;
+                    }
+
+                    player = enemy.followingPlayer;
+                    isReady = true;
+                };
+            }
+            else
+            {
                 player = enemy.followingPlayer;
                 isReady = true;
-            };
+            }
         }
-        else
-        {
-            player = enemy.followingPlayer;
-            isReady = true;
-        }
-    }
 
-    void Update()
-    {
-        if (isReady)
+        private void Update()
         {
-            transform.LookAt(player.transform);
+            if (isReady)
+            {
+                transform.LookAt(player.transform);
+            }
         }
     }
 }

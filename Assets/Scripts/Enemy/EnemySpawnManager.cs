@@ -1,77 +1,79 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Unity.Netcode;
+using UnityEngine;
 
-public class EnemySpawnManager : Singleton<EnemySpawnManager>
+namespace Enemy
 {
-    [SerializeField] EnemyScriptableObject[] enemyTypes;
-    [SerializeField] GameObject enemyPrefab;
-    [SerializeField] NetworkVariable<bool> isSpawning = new NetworkVariable<bool>(false);
-
-    public bool IsSpawning => isSpawning.Value;
-
-    public void SetIsSpawn(bool value)
+    public class EnemySpawnManager : Singleton<EnemySpawnManager>
     {
-        isSpawning.Value = value;
-    }
+        [SerializeField] private EnemyScriptableObject[] enemyTypes;
+        [SerializeField] private GameObject enemyPrefab;
+        [SerializeField] private NetworkVariable<bool> isSpawning = new NetworkVariable<bool>(false);
 
-    public void SetIsSpawn(Func<bool, bool> func)
-    {
-        var newValue = func(isSpawning.Value);
-        isSpawning.Value = newValue;
-    }
+        public bool IsSpawning => isSpawning.Value;
 
-    public EnemyScriptableObject GetEnemyConfigById(int id)
-    {
-        if (enemyTypes.Length == 0 || id >= enemyTypes.Length || id < 0)
+        public void SetIsSpawn(bool value)
         {
-            return null;
-        }
-        return enemyTypes[id];
-    }
-
-    public override void OnNetworkSpawn()
-    {
-        if (!IsServer)
-        {
-            return;
+            isSpawning.Value = value;
         }
 
-        isSpawning.OnValueChanged += (_, current) =>
+        public void SetIsSpawn(Func<bool, bool> func)
         {
-            if (current)
-            {
-                StartCoroutine(SpawnEnemy());
-            }
-            else
-            {
-                StopCoroutine(SpawnEnemy());
-            }
-        };
-    }
+            var newValue = func(isSpawning.Value);
+            isSpawning.Value = newValue;
+        }
 
-    IEnumerator SpawnEnemy()
-    {
-        while (isSpawning.Value)
+        public EnemyScriptableObject GetEnemyConfigById(int id)
         {
-            if (enemyTypes.Length == 0)
+            if (enemyTypes.Length == 0 || id >= enemyTypes.Length || id < 0)
             {
+                return null;
+            }
+            return enemyTypes[id];
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            if (!IsServer)
+            {
+                return;
+            }
+
+            isSpawning.OnValueChanged += (_, current) =>
+            {
+                if (current)
+                {
+                    StartCoroutine(SpawnEnemy());
+                }
+                else
+                {
+                    StopCoroutine(SpawnEnemy());
+                }
+            };
+        }
+
+        private IEnumerator SpawnEnemy()
+        {
+            while (isSpawning.Value)
+            {
+                if (enemyTypes.Length == 0)
+                {
+                    yield return new WaitForSeconds(5.0f);
+                    continue;
+                }
+
+                var randomPosition = new Vector3(UnityEngine.Random.Range(-5, 5), -3, UnityEngine.Random.Range(-5, 5));
+                var enemyGameObject = Instantiate(enemyPrefab, randomPosition, Quaternion.identity);
+
+                var enemyNetwork = enemyGameObject.GetComponent<NetworkObject>();
+                enemyNetwork.Spawn();
+
+                var enemy = enemyGameObject.GetComponent<global::Enemy.Enemy>();
+                enemy.InitializeConfigId(UnityEngine.Random.Range(0, enemyTypes.Length));
+
                 yield return new WaitForSeconds(5.0f);
-                continue;
             }
-
-            var randomPosition = new Vector3(UnityEngine.Random.Range(-5, 5), -3, UnityEngine.Random.Range(-5, 5));
-            var enemyGameObject = Instantiate(enemyPrefab, randomPosition, Quaternion.identity);
-
-            var enemyNetwork = enemyGameObject.GetComponent<NetworkObject>();
-            enemyNetwork.Spawn();
-
-            var enemy = enemyGameObject.GetComponent<Enemy>();
-            enemy.InitializeConfigId(UnityEngine.Random.Range(0, enemyTypes.Length));
-
-            yield return new WaitForSeconds(5.0f);
         }
     }
 }

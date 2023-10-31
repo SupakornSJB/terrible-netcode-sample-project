@@ -1,27 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
-public class EnemyOverlay : MonoBehaviour
+namespace Enemy
 {
-    private TextMeshProUGUI enemyOverlayText;
-    private EnemyHealth health;
-
-    void Start()
+    public class EnemyOverlay : MonoBehaviour
     {
-        enemyOverlayText = GetComponentInChildren<TextMeshProUGUI>();
-        health = GetComponent<EnemyHealth>();
+        private TextMeshProUGUI enemyOverlayText;
+        private EnemyHealth health;
 
-        if (enemyOverlayText == null || health == null)
+        private void Start()
         {
-            Debug.LogError("Overlay text or enemy is null");
+            enemyOverlayText = GetComponentInChildren<TextMeshProUGUI>();
+            health = GetComponent<EnemyHealth>();
+
+            if (enemyOverlayText != null && health != null) return;
             enabled = false;
         }
-    }
 
-    void Update()
-    {
-        enemyOverlayText.text = "HP: " + health.HP_stat.Value;
+        private void Update()
+        {
+            enemyOverlayText.text = "HP: " + health.hpStat.Value;
+        }
     }
 }

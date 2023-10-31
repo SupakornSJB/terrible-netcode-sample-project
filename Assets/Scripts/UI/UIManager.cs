@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Enemy;
+using Player;
 using Unity.Netcode;
 using TMPro;
 using UnityEngine;

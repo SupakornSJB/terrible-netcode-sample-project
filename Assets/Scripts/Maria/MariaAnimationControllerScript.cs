@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Player;
 using UnityEngine;
 using Unity.Netcode;
 
@@ -14,7 +15,7 @@ public class MariaAnimationControllerScript : NetworkBehaviour
     public void Start()
     {
         animator = GetComponent<Animator>();
-        onFoot = GetComponentInParent<InputManager>().onFoot;
+        onFoot = GetComponentInParent<InputManager>().OnFoot;
         Debug.Log("Server owned: " + IsOwnedByServer);
 
         if (!IsOwner || !IsClient) return;

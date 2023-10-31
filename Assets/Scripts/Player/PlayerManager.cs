@@ -1,44 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerManager : Singleton<PlayerManager>
+namespace Player
 {
-    private NetworkVariable<int> playersInGame = new NetworkVariable<int>();
-
-    public override void OnNetworkSpawn()
+    public class PlayerManager : Singleton<PlayerManager>
     {
-        base.OnNetworkSpawn();
-        playersInGame.Value = 0;
-    }
+        private readonly NetworkVariable<int> playersInGame = new NetworkVariable<int>();
 
-    public int PlayersInGame
-    {
-        get
+        public override void OnNetworkSpawn()
         {
-            return playersInGame.Value;
+            base.OnNetworkSpawn();
+            playersInGame.Value = 0;
         }
-    }
-    private void Start()
-    {
 
-        NetworkManager.Singleton.OnClientConnectedCallback += (id) =>
+        public int PlayersInGame => playersInGame.Value;
+
+        private void Start()
         {
-            if (NetworkManager.Singleton.IsServer)
+
+            NetworkManager.Singleton.OnClientConnectedCallback += (id) =>
             {
+                if (!NetworkManager.Singleton.IsServer) return;
                 Debug.Log($"{id} just connected...");
                 playersInGame.Value++;
-            }
-        };
+            };
 
-        NetworkManager.Singleton.OnClientDisconnectCallback += (id) =>
-        {
-            if (NetworkManager.Singleton.IsServer)
+            NetworkManager.Singleton.OnClientDisconnectCallback += (id) =>
             {
+                if (!NetworkManager.Singleton.IsServer) return;
                 Debug.Log($"{id} just disconnected...");
                 playersInGame.Value--;
-            }
-        };
+            };
+        }
     }
 }
