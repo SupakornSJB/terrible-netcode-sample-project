@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,9 +8,15 @@ using UnityEngine;
 
 public class PlayerHUD : NetworkBehaviour
 {
-    private NetworkVariable<NetworkString> playersName = new NetworkVariable<NetworkString>();
-
+    private readonly NetworkVariable<NetworkString> playersName = new NetworkVariable<NetworkString>();
+    private TextMeshProUGUI localPlayerOverlay; 
     private bool overlaySet = false;
+
+    public void Start()
+    {
+        localPlayerOverlay = GetComponentInChildren<TextMeshProUGUI>();
+    }
+
     public override void OnNetworkSpawn()
     {
         if (IsServer)
@@ -18,9 +25,8 @@ public class PlayerHUD : NetworkBehaviour
         }
     }
 
-    public void SetOverlay()
+    private void SetOverlay()
     {
-        var localPlayerOverlay = gameObject.GetComponentInChildren<TextMeshProUGUI>();
         localPlayerOverlay.text = playersName.Value;
     }
 
@@ -32,5 +38,5 @@ public class PlayerHUD : NetworkBehaviour
             overlaySet = true;
         }
     }
-}
 
+}

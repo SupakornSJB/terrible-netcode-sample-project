@@ -10,13 +10,7 @@ public class EnemySpawnManager : Singleton<EnemySpawnManager>
     [SerializeField] GameObject enemyPrefab;
     [SerializeField] NetworkVariable<bool> isSpawning = new NetworkVariable<bool>(false);
 
-    public bool IsSpawning
-    {
-        get
-        {
-            return isSpawning.Value;
-        }
-    }
+    public bool IsSpawning => isSpawning.Value;
 
     public void SetIsSpawn(bool value)
     {
@@ -25,7 +19,7 @@ public class EnemySpawnManager : Singleton<EnemySpawnManager>
 
     public void SetIsSpawn(Func<bool, bool> func)
     {
-        bool newValue = func(isSpawning.Value);
+        var newValue = func(isSpawning.Value);
         isSpawning.Value = newValue;
     }
 
@@ -68,13 +62,13 @@ public class EnemySpawnManager : Singleton<EnemySpawnManager>
                 continue;
             }
 
-            Vector3 randomPosition = new Vector3(UnityEngine.Random.Range(-5, 5), -3, UnityEngine.Random.Range(-5, 5));
-            GameObject enemyGameObject = Instantiate(enemyPrefab, randomPosition, Quaternion.identity);
+            var randomPosition = new Vector3(UnityEngine.Random.Range(-5, 5), -3, UnityEngine.Random.Range(-5, 5));
+            var enemyGameObject = Instantiate(enemyPrefab, randomPosition, Quaternion.identity);
 
-            NetworkObject enemyNetwork = enemyGameObject.GetComponent<NetworkObject>();
+            var enemyNetwork = enemyGameObject.GetComponent<NetworkObject>();
             enemyNetwork.Spawn();
 
-            Enemy enemy = enemyGameObject.GetComponent<Enemy>();
+            var enemy = enemyGameObject.GetComponent<Enemy>();
             enemy.InitializeConfigId(UnityEngine.Random.Range(0, enemyTypes.Length));
 
             yield return new WaitForSeconds(5.0f);

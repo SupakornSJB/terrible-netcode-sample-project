@@ -8,17 +8,14 @@ using Unity.Netcode;
 [Tooltip("This is a player health script")]
 public class PlayerHealth : NetworkBehaviour
 {
-    [Tooltip("Player's health")]
-    private NetworkVariable<int> health = new NetworkVariable<int>();
-    /* private CharacterController controller; */
+    [Tooltip("Player's health")] private readonly NetworkVariable<int> health = new NetworkVariable<int>();
     private TextMeshProUGUI healthText;
 
     private void Start()
     {
-        /* controller = GetComponent<CharacterController>(); */
-        /* controller.detectCollisions = true; */
         healthText = GameObject.Find("Canvas/HealthDisplayText").GetComponent<TextMeshProUGUI>();
-        healthText.text = "health " + health.Value;
+        healthText.text = "HP: " + health.Value;
+        Debug.Log("Hello world");
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -46,10 +43,7 @@ public class PlayerHealth : NetworkBehaviour
 
         if (IsOwner && IsClient)
         {
-            health.OnValueChanged += (prev, current) =>
-            {
-                healthText.text = "health " + current;
-            };
+            health.OnValueChanged += (prev, current) => { healthText.text = "health " + current; };
         }
     }
 

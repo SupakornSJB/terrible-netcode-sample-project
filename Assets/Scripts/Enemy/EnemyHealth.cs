@@ -7,7 +7,7 @@ using Unity.Netcode;
 public class EnemyHealth : NetworkBehaviour
 {
     private Enemy enemy;
-    private NetworkVariable<int> HP_stat = new NetworkVariable<int>(10);
+    public NetworkVariable<int> HP_stat = new NetworkVariable<int>(10);
 
     public override void OnNetworkSpawn()
     {
@@ -33,11 +33,11 @@ public class EnemyHealth : NetworkBehaviour
         };
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (IsServer && other.CompareTag("Bullet"))
+        if (IsServer && collision.gameObject.CompareTag("Bullet"))
         {
-            HP_stat.Value -= 10;
+            HP_stat.Value -= 60;
         }
     }
 }

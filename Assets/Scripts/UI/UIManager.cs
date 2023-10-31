@@ -28,38 +28,17 @@ public class UIManager : NetworkBehaviour
     {
         startHostButton.onClick.AddListener(() =>
         {
-            if (NetworkManager.Singleton.StartHost())
-            {
-                Debug.Log("Host Started...");
-            }
-            else
-            {
-                Debug.Log("Host can not be started");
-            }
+            Debug.Log(NetworkManager.Singleton.StartHost() ? "Host Started..." : "Host can not be started");
         });
 
         startClientButton.onClick.AddListener(() =>
         {
-            if (NetworkManager.Singleton.StartClient())
-            {
-                Debug.Log("Client Started...");
-            }
-            else
-            {
-                Debug.Log("Client can not be started");
-            }
+            Debug.Log(NetworkManager.Singleton.StartClient() ? "Client Started..." : "Client can not be started");
         });
 
         startServerButton.onClick.AddListener(() =>
         {
-            if (NetworkManager.Singleton.StartServer())
-            {
-                Debug.Log("Server Started...");
-            }
-            else
-            {
-                Debug.Log("Server can not be started");
-            }
+            Debug.Log(NetworkManager.Singleton.StartServer() ? "Server Started..." : "Server can not be started");
         });
 
         startSpawnButton.onClick.AddListener(() =>

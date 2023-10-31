@@ -25,8 +25,10 @@ public class Singleton<T> : NetworkBehaviour
                 }
                 else if (_instance == null)
                 {
-                    GameObject obj = new GameObject();
-                    obj.name = string.Format("_{0}", typeof(T).Name);
+                    GameObject obj = new GameObject
+                    {
+                        name = $"_{typeof(T).Name}"
+                    };
                     _instance = obj.AddComponent<T>();
                 }
             }

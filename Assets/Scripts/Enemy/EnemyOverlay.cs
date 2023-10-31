@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class EnemyOverlay : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private TextMeshProUGUI enemyOverlayText;
+    private EnemyHealth health;
+
     void Start()
     {
-        
+        enemyOverlayText = GetComponentInChildren<TextMeshProUGUI>();
+        health = GetComponent<EnemyHealth>();
+
+        if (enemyOverlayText == null || health == null)
+        {
+            Debug.LogError("Overlay text or enemy is null");
+            enabled = false;
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        enemyOverlayText.text = "HP: " + health.HP_stat.Value;
     }
 }

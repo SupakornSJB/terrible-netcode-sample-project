@@ -8,18 +8,18 @@ public class Enemy : NetworkBehaviour
 {
     [SerializeField] private NetworkVariable<bool> isMoving = new NetworkVariable<bool>();
     [SerializeField] public NetworkVariable<bool> isReady = new NetworkVariable<bool>(false);
-    private NetworkVariable<int> enemyConfigId = new NetworkVariable<int>(-1); // crucial must be set to non zero
+    private readonly NetworkVariable<int> enemyConfigId = new NetworkVariable<int>(-1); // crucial must be set to non positive 
     public EnemyScriptableObject enemyConfig;
-    GameObject followingPlayer;
+    public GameObject followingPlayer;
+    private bool hasFoundPlayer;
 
     void Update()
     {
-        if (isMoving.Value && isReady.Value && followingPlayer != null)
+        if (isMoving.Value && isReady.Value)
         {
             Vector3 direction = (followingPlayer.transform.position - transform.position).normalized;
             direction.y = 0f;
-            transform.Translate(direction
-               * enemyConfig.Movement_SPD_stat * Time.deltaTime);
+            transform.Translate(transform.TransformDirection(direction) * (enemyConfig.Movement_SPD_stat * Time.deltaTime));
         }
     }
 
@@ -64,7 +64,7 @@ public class Enemy : NetworkBehaviour
 
         if (IsServer)
         {
-            isMoving.Value = followingPlayer == null ? false : true;
+            isMoving.Value = followingPlayer != null;
         }
 
         if (enemyConfig != null && followingPlayer != null)
