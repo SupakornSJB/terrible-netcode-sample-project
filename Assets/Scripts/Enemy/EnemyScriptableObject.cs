@@ -13,5 +13,8 @@ namespace Enemy
         [FormerlySerializedAs("DEF_stat")] public int defStat;
         [FormerlySerializedAs("Movement_SPD_stat")] public int movementSpdStat;
         public Material mat;
+        public bool isFlying = false;
+        public bool isMelee = false;
+        public float normalRangeFromPlayer;
     }
 }

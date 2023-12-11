@@ -13,6 +13,7 @@ public class UIManager : NetworkBehaviour
     [SerializeField] private Button startClientButton;
     [SerializeField] private Button startServerButton;
     [SerializeField] private Button startSpawnButton;
+    [SerializeField] private Button testSpawnButton;
     [SerializeField] private TextMeshProUGUI inGameText;
 
     private void Awake()
@@ -22,7 +23,7 @@ public class UIManager : NetworkBehaviour
 
     private void Update()
     {
-        inGameText.text = $"Players in game: {PlayerManager.Instance.PlayersInGame} <br>" + 
+        inGameText.text = $"Players in game: {PlayerManager.Instance.PlayersInGame} <br>" +
           $"Spawning: {EnemySpawnManager.Instance.IsSpawning}";
     }
 
@@ -49,6 +50,11 @@ public class UIManager : NetworkBehaviour
             {
                 EnemySpawnManager.Instance.SetIsSpawn((prev) => !prev);
             }
+        });
+
+        testSpawnButton.onClick.AddListener(() =>
+        {
+            EnemySpawnManager.Instance.TestSpawn();
         });
     }
 }

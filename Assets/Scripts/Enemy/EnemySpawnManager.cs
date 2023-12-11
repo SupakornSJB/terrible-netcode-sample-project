@@ -10,6 +10,7 @@ namespace Enemy
         [SerializeField] private EnemyScriptableObject[] enemyTypes;
         [SerializeField] private GameObject enemyPrefab;
         [SerializeField] private NetworkVariable<bool> isSpawning = new NetworkVariable<bool>(false);
+        [SerializeField] private GameObject improvedEnemyPrefab;
 
         public bool IsSpawning => isSpawning.Value;
 
@@ -51,6 +52,11 @@ namespace Enemy
                     StopCoroutine(SpawnEnemy());
                 }
             };
+        }
+
+        public void TestSpawn()
+        {
+            Instantiate(improvedEnemyPrefab);
         }
 
         private IEnumerator SpawnEnemy()
