@@ -1,9 +1,10 @@
 using UnityEngine;
+using Unity.Netcode;
 
-public class EnemyStrikingDistanceCheck : MonoBehaviour
+public class EnemyStrikingDistanceCheck : NetworkBehaviour
 {
-    public GameObject PlayerTarget { get; set; }
-    public EnemyBase _enemy;
+    private GameObject PlayerTarget { get; set; }
+    private EnemyBase _enemy;
 
     public void Awake()
     {
@@ -13,17 +14,19 @@ public class EnemyStrikingDistanceCheck : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
+        if (!IsServer) return;
         if (collider.gameObject == PlayerTarget)
         {
-            _enemy.setStrikingDistancBool(true);
+            _enemy.SetStrikingDistancBool(true);
         }
     }
 
     private void OnTriggerExit(Collider collider)
     {
+        if (!IsServer) return;
         if (collider.gameObject == PlayerTarget)
         {
-            _enemy.setStrikingDistancBool(false);
+            _enemy.SetStrikingDistancBool(false);
         }
     }
 }

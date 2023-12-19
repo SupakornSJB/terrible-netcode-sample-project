@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Standing Still", menuName = "Enemy Logic/Idle Logic")]
+[CreateAssetMenu(fileName = "Standing Still", menuName = "Enemy Logic/Idle Logic/Standing Still")]
 public class EnemyIdleStandingStill : EnemyIdleSOBase
 {
     public override void DoAnimationTriggerEventLogic()
@@ -24,6 +24,7 @@ public class EnemyIdleStandingStill : EnemyIdleSOBase
     {
         if (enemy.isAggroed)
         {
+            Debug.Log("Enemy is aggroed!!");
             enemy.StateMachine.ChangeState(enemy.ChaseState);
         }
         base.DoFrameUpdateLogic();

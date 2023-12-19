@@ -1,8 +1,9 @@
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-[CreateAssetMenu(fileName = "Launch", menuName = "Enemy Logic/Attack Logic/Launch")]
-public class EnemyAttackLaunch : EnemyAttackSOBase
+[CreateAssetMenu(fileName = "Shoot", menuName = "Enemy Logic/Attack Logic/Shoot")]
+public class EnemyAttackShoot : EnemyAttackSOBase
 {
     public override void DoAnimationTriggerEventLogic()
     {
@@ -12,15 +13,20 @@ public class EnemyAttackLaunch : EnemyAttackSOBase
     public override void DoEnterLogic()
     {
         base.DoEnterLogic();
-        Debug.Log("Entering Random Attack State");
-        var randomAtk = Random.Range(0, allAttack.Count);
-        allAttack[randomAtk].PerformAttack();
+        Debug.Log("Enter Attack Shoot State");
+        if (allAttack.Count <= 0)
+        {
+            Debug.LogError("Enemy has no attack set");
+            return;
+        }
+        allAttack[0].PerformAttack();
+        enemy.StateMachine.ChangeState(enemy.IdleState);
     }
 
     public override void DoExitLogic()
     {
         base.DoExitLogic();
-        Debug.Log("Exiting Random Attack State");
+        Debug.Log("Exit Attack Shoot State");
     }
 
     public override void DoFrameUpdateLogic()

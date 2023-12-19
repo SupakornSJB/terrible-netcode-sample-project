@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c78b3d0ddfcaa124fa643072a510760a, type: 3}
-  m_Name: NormalLaunchAttack
+  m_Script: {fileID: 11500000, guid: 8ed6355dec7d25349824d9c04cbf0245, type: 3}
+  m_Name: CooldownThreeSeconds
   m_EditorClassIdentifier: 
-  allAttack:
-  - {fileID: 11400000, guid: 56cd46f1d96c3b84a935314eb2251ecd, type: 2}
+  cooldownTime: 3

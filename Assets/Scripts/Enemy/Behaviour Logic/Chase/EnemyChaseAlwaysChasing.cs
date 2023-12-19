@@ -26,7 +26,12 @@ public class EnemyChaseAlwaysChasing : EnemyChaseSOBase
     {
         base.DoFrameUpdateLogic();
         transform.LookAt(playerTransform);
-        transform.Translate(transform.forward * (_speed * Time.deltaTime));
+        transform.Translate(Vector3.forward * (_speed * Time.deltaTime));
+        
+        if (enemy.isWithinStrikingDistance)
+        {
+            enemy.StateMachine.ChangeState(enemy.AttackState); 
+        }
     }
 
     public override void DoPhysicsUpdateLogic()

@@ -56,7 +56,8 @@ namespace Enemy
 
         public void TestSpawn()
         {
-            Instantiate(improvedEnemyPrefab);
+            var enemy = NetworkObjectPool.Singleton.GetNetworkObject(improvedEnemyPrefab, Vector3.zero, Quaternion.identity);
+            enemy.Spawn();
         }
 
         private IEnumerator SpawnEnemy()

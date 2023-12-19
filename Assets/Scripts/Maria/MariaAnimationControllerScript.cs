@@ -16,7 +16,6 @@ public class MariaAnimationControllerScript : NetworkBehaviour
     {
         animator = GetComponent<Animator>();
         onFoot = GetComponentInParent<InputManager>().OnFoot;
-        Debug.Log("Server owned: " + IsOwnedByServer);
 
         if (!IsOwner || !IsClient) return;
         onFoot.Sprint.performed += (ctx) => SetSprintingServerRpc(true);

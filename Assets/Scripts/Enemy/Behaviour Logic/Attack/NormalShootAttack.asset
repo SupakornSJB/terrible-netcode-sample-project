@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c78b3d0ddfcaa124fa643072a510760a, type: 3}
-  m_Name: NormalLaunchAttack
+  m_Script: {fileID: 11500000, guid: 89345c4e3bd125d498c947037a8d73c2, type: 3}
+  m_Name: NormalShootAttack
   m_EditorClassIdentifier: 
   allAttack:
-  - {fileID: 11400000, guid: 56cd46f1d96c3b84a935314eb2251ecd, type: 2}
+  - {fileID: 11400000, guid: 1118ff5037a297149b608686f275bf38, type: 2}
